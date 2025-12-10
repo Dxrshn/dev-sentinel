@@ -1,0 +1,11 @@
+{
+    "repo": "demo/dev-sentinel",
+    "timestamp": "2025-12-10T00:00:00Z",
+    "health_score": 78,
+    "risk_score": 35,
+    "priority_fixes": [
+      { "title": "Run safe dependency updates", "impact": "Reduces security and compatibility risk", "confidence": 0.76, "category": "deps" },
+      { "title": "Split Actions page state and UI logic", "impact": "Improves maintainability", "confidence": 0.62, "category": "refactor" }
+    ]
+  }
+  

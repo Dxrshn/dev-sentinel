@@ -1,0 +1,14 @@
+{
+    "repo": "demo/dev-sentinel",
+    "timestamp": "2025-12-10T00:00:00Z",
+    "complexity_hotspots": [
+      { "file": "apps/web/app/actions/page.tsx", "score": 72, "reason": "mixed responsibilities" }
+    ],
+    "outdated_deps": [
+      { "name": "lodash", "current": "4.17.20", "latest": "4.17.21", "risk": "medium", "isDirect": true }
+    ],
+    "pr_stats": [
+      { "id": "1", "title": "Add actions page scaffold", "additions": 120, "deletions": 0, "filesChanged": 6 }
+    ]
+  }
+  
