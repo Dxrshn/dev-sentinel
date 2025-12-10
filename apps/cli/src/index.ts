@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { Command } from "commander";
-import { runBaseline } from "./commands/health-baseline";
-import { runScan } from "./commands/health-scan";
-import { runDepsUpdate } from "./commands/deps-update";
-import { runDocsGenerate } from "./commands/docs-generate";
+import { runBaseline } from "./commands/health-baseline.js";
+import { runScan } from "./commands/health-scan.js";
+import { runDepsUpdate } from "./commands/deps-update.js";
+import { runDocsGenerate } from "./commands/docs-generate.js";
 
 const program = new Command();
 
