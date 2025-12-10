@@ -1,15 +1,19 @@
 import { NextResponse } from "next/server";
+import { SignalsSchema, SummarySchema, JudgeSchema } from "@dev-sentinel/shared";
+
+import signals from "../../../../../../mock/signals.json";
+import summary from "../../../../../../mock/summary.json";
+import judge from "../../../../../../mock/judge.json";
 
 export async function GET() {
-  // TODO: Fetch actual data from your backend
-  const mockData = {
-    judge: {
-      health_score: 85,
-    },
-    summary: {
-      narrative: "Your code quality has improved by 15% this week. Great job on reducing technical debt!",
-    },
-  };
+  const parsedSignals = SignalsSchema.parse(signals);
+  const parsedSummary = SummarySchema.parse(summary);
+  const parsedJudge = JudgeSchema.parse(judge);
 
-  return NextResponse.json(mockData);
+  return NextResponse.json({
+    signals: parsedSignals,
+    summary: parsedSummary,
+    judge: parsedJudge,
+    source: "mock",
+  });
 }
