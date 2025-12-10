@@ -1,0 +1,19 @@
+{
+  "name": "@dev-sentinel/cli",
+  "version": "0.0.1",
+  "bin": {
+    "dev-sentinel": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@dev-sentinel/shared": "workspace:*",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
