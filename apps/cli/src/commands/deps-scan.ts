@@ -1,14 +1,13 @@
 import { SignalsSchema } from "@dev-sentinel/shared";
 
-export async function runScan(opts: { repo: string }) {
+export async function runDepsScan(opts: { repo: string }) {
   const payload = {
     repo: opts.repo,
     timestamp: new Date().toISOString(),
-    complexity_hotspots: [
-      { file: "apps/web/src/app/actions/page.tsx", score: 70, reason: "state + UI mixed" }
-    ],
+    complexity_hotspots: [],
     outdated_deps: [
-      { name: "lodash", current: "4.17.20", latest: "4.17.21", risk: "medium", isDirect: true }
+      { name: "react", current: "18.2.0", latest: "18.3.1", risk: "low", isDirect: true },
+      { name: "some-transitive-lib", current: "1.0.0", latest: "3.0.0", risk: "high", isDirect: false }
     ],
     pr_stats: []
   };

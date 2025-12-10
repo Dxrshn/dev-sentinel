@@ -1,0 +1,75 @@
+id: code-health-on-demand
+namespace: dev.sentinel
+
+description: >
+  On-demand code health pipeline:
+  fetch signals -> AI Agent summary -> optional decision -> store summary
+
+inputs:
+  - id: repo
+    type: STRING
+    defaults: "demo/dev-sentinel"
+
+tasks:
+  - id: fetch_signals
+    type: io.kestra.plugin.core.http.Request
+    method: GET
+    url: "{{ vars.signals_endpoint | default('https://YOUR_VERCEL_URL/api/data') }}"
+    allowFailed: false
+
+  # This assumes the /api/data returns signals/summary/judge.
+  # You can later split endpoints.
+
+  - id: extract_signals
+    type: io.kestra.plugin.core.debug.Return
+    format: json
+    values:
+      repo: "{{ inputs.repo }}"
+      timestamp: "{{ now() }}"
+      signals: "{{ outputs.fetch_signals.body.signals }}"
+
+  - id: ai_summary
+    type: io.kestra.plugin.core.ai.Agent
+    # The exact config may vary by Kestra version/environment.
+    # Keep the prompt clear and short.
+    prompt: |
+      You are an engineering code health analyst.
+      Summarize the following signals for repo {{ inputs.repo }}.
+      Provide:
+      - 3 bullet highlights
+      - 3 risks/warnings
+      - 1 recommended next action
+
+      Signals JSON:
+      {{ outputs.fetch_signals.body.signals }}
+
+  - id: build_summary_contract
+    type: io.kestra.plugin.core.debug.Return
+    format: json
+    values:
+      repo: "{{ inputs.repo }}"
+      timestamp: "{{ now() }}"
+      narrative: "{{ outputs.ai_summary.text }}"
+      highlights:
+        - "Automated scan executed"
+      warnings:
+        - "Dependency drift detected"
+
+  # Bonus: decision step (simple)
+  - id: decide_next_action
+    type: io.kestra.plugin.core.switches.Switch
+    value: "{{ outputs.fetch_signals.body.signals.outdated_deps | length }}"
+    cases:
+      "0":
+        - id: no_action
+          type: io.kestra.plugin.core.log.Log
+          message: "No dependency action required."
+    defaults:
+      - id: recommend_deps_safe_update
+        type: io.kestra.plugin.core.log.Log
+        message: "Recommend running cline deps:update --safe"
+
+outputs:
+  - id: summary
+    type: JSON
+    value: "{{ outputs.build_summary_contract }}"
