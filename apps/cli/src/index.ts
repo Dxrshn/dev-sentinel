@@ -31,7 +31,7 @@ program
 program
   .command("deps:update")
   .option("--repo <repo>", "Repo name", "demo/dev-sentinel")
-  .option("--safe", "Safe updates only", true)
+  .option("--safe", "Safe updates only")
   .action(runDepsUpdate);
 
 program

@@ -6,9 +6,9 @@ export type {
   Signals,
   Summary,
   Judge,
+  PriorityFixType,
+  ComplexityHotspotType,
+  DependencyItemType,
+  RiskLevelType,
+  HealthDataResponse,
 } from "./types";
-
-// Re-export schema types
-export type {
-  z,
-} from "zod";
