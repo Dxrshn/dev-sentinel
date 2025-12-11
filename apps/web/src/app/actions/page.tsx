@@ -34,11 +34,29 @@ export default function ActionsPage() {
         body: JSON.stringify({ repo: "demo/dev-sentinel" }),
       });
 
+      // Get response text first to see what we're getting
+      const text = await res.text();
+      
       if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
+        // Try to parse error response
+        let errorData: any = {};
+        try {
+          errorData = JSON.parse(text);
+        } catch {
+          errorData = { error: text || `HTTP ${res.status}` };
+        }
+        
+        console.error("API Error:", {
+          status: res.status,
+          statusText: res.statusText,
+          body: errorData,
+        });
+        
+        throw new Error(errorData.error || errorData.message || `HTTP error! status: ${res.status}`);
       }
 
-      const json: KestraTriggerResponse = await res.json();
+      // Parse successful response
+      const json: KestraTriggerResponse = JSON.parse(text);
       
       if (!json.ok) {
         throw new Error(json.error ?? "Trigger failed");
@@ -50,6 +68,7 @@ export default function ActionsPage() {
           : `Kestra triggered successfully! Execution ID: ${json.executionId || "N/A"}`
       );
     } catch (error) {
+      console.error("Run scan error:", error);
       const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
       setStatus(`Error: ${errorMessage}`);
     } finally {
@@ -68,8 +87,8 @@ export default function ActionsPage() {
         </div>
 
         <div className="rounded-2xl border bg-white p-5 shadow-sm">
-          <div className="text-lg font-semibold">{actions[0].title}</div>
-          <p className="mt-1 text-sm text-muted-foreground">{actions[0].desc}</p>
+          <div className="text-lg font-semibold">{actions[0]?.title}</div>
+          <p className="mt-1 text-sm text-muted-foreground">{actions[0]?.desc}</p>
 
           <button
             className="mt-4 rounded-xl border px-3 py-2 text-sm hover:bg-black/5 disabled:opacity-50 disabled:cursor-not-allowed"

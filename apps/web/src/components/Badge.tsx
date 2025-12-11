@@ -1,7 +1,4 @@
-import type { z } from "zod";
-import { RiskLevel } from "@dev-sentinel/shared";
-
-type RiskLevelType = z.infer<typeof RiskLevel>;
+import { RiskLevelType } from "@dev-sentinel/shared";
 
 const map: Record<RiskLevelType, string> = {
   low: "bg-green-50 text-green-700 border-green-200",
