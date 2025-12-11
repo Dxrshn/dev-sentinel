@@ -1,0 +1,29 @@
+id: code-health-on-demand-simple
+namespace: dev.sentinel
+description: "Non-AI version: On-demand code health summary (mock-safe)"
+
+inputs:
+  - id: repo
+    type: STRING
+    defaults: "demo/dev-sentinel"
+
+tasks:
+  - id: build_summary_contract
+    type: io.kestra.plugin.core.debug.Return
+    format: json
+    values:
+      repo: "{{ inputs.repo }}"
+      timestamp: "{{ now() }}"
+      narrative: "Code health is stable with moderate dependency drift and a small rise in complexity hotspots. Overall maintainability remains good."
+      highlights:
+        - "New dashboard modules added"
+        - "CI signals stable"
+        - "No critical security vulnerabilities"
+      warnings:
+        - "A few dependencies are outdated"
+        - "One module shows rising complexity"
+
+outputs:
+  - id: summary
+    type: JSON
+    value: "{{ outputs.build_summary_contract }}"

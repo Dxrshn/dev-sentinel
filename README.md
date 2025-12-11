@@ -1,135 +1,135 @@
-# Turborepo starter
+# Dev-Sentinel
 
-This Turborepo starter is maintained by the Turborepo core team.
+**Code Health Command Center**
 
-## Using this example
+Dev-Sentinel is a comprehensive code health monitoring and automation platform that helps engineering teams maintain code quality, track dependencies, and automate health improvements through AI-powered workflows.
 
-Run the following command:
+## Overview
 
-```sh
-npx create-turbo@latest
+Dev-Sentinel follows an **Observe → Summarize → Judge → Fix → Prove** workflow to continuously monitor and improve code health across your repositories.
+
+## Architecture
+
+This is a monorepo built with [Turborepo](https://turborepo.com) and [pnpm](https://pnpm.io) workspaces, containing:
+
+### Apps
+
+- **`apps/web`** - Next.js dashboard (App Router) providing a web interface for viewing code health metrics, dependencies, and triggering automated actions
+- **`apps/cli`** - TypeScript CLI tool (`dev-sentinel`) for running health scans, dependency checks, and documentation generation
+- **`apps/kestra`** - Kestra workflow definitions for orchestrating code health analysis and automation tasks
+
+### Packages
+
+- **`packages/shared`** - Shared TypeScript types and Zod schemas for data contracts (Signals, Summary, Judge)
+- **`packages/ui`** - Shared UI components
+- **`packages/eslint-config`** - ESLint configurations
+- **`packages/typescript-config`** - TypeScript configurations
+
+### Data
+
+- **`mock/`** - JSON mock data files (signals.json, summary.json, judge.json) for demo and development
+
+## Features
+
+### Next.js Dashboard
+
+The web dashboard provides:
+
+- **Overview** (`/`) - Health score, risk score, priority fixes, and weekly summary
+- **Health Score** (`/health`) - Detailed health metrics
+- **Dependencies** (`/dependencies`) - Table of outdated dependencies with risk levels
+- **Actions Center** (`/actions`) - One-click automations to trigger Kestra workflows
+- **Before / After** (`/before-after`) - Track improvements and ROI
+
+### CLI Commands
+
+The Dev-Sentinel CLI provides the following commands:
+
+```bash
+# Create a baseline health snapshot
+dev-sentinel health:baseline
+
+# Run a full health scan
+dev-sentinel health:scan
+
+# Scan for outdated dependencies
+dev-sentinel deps:scan
+
+# Prepare safe dependency updates
+dev-sentinel deps:update --safe
+
+# Generate documentation
+dev-sentinel docs:generate --scope <scope>
 ```
 
-## What's inside?
+### Kestra Workflows
 
-This Turborepo includes the following packages/apps:
+Kestra flows orchestrate code health analysis and automation:
 
-### Apps and Packages
+- **`code-health-on-demand`** - On-demand code health summary generation
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Integration
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- **CodeRabbit** - Automated code review and PR analysis (configured via `.github/coderabbit.yaml`)
+- **Vercel** - Deployment platform for the Next.js dashboard
 
-### Utilities
+## Getting Started
 
-This Turborepo has some additional tools already setup for you:
+### Prerequisites
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- Node.js >= 18
+- pnpm 9.0.0
 
-### Build
+### Installation
 
-To build all apps and packages, run the following command:
+```bash
+# Install dependencies
+pnpm install
 
-```
-cd my-turborepo
+# Build all packages
+pnpm build
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+# Run development servers
+pnpm dev
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+### Development
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+```bash
+# Run web dashboard
+pnpm dev --filter=web
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+# Run CLI in dev mode
+cd apps/cli && pnpm dev health:scan
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+# Build CLI
+cd apps/cli && pnpm build
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## Data Contracts
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+All data structures are defined in `packages/shared` using Zod schemas:
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+- **Signals** - Raw code health signals (complexity hotspots, outdated deps, PR stats)
+- **Summary** - Narrative summary with highlights and warnings
+- **Judge** - Health score, risk score, and priority fixes
 
-### Remote Caching
+## Environment Variables
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+### Web App
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+- `NEXT_PUBLIC_BASE_URL` - Base URL for the deployed application (set in Vercel)
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+### Kestra Integration
 
-```
-cd my-turborepo
+- `KESTRA_TRIGGER_URL` - Full URL to trigger Kestra execution
+- `KESTRA_BASE_URL` - Base URL for Kestra API (alternative to full trigger URL)
+- `KESTRA_API_KEY` - API key for Kestra authentication (optional)
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
+## Deployment
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
+The Next.js dashboard is designed to be deployed on **Vercel**. Set the `NEXT_PUBLIC_BASE_URL` environment variable to your production URL.
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## License
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+Private project

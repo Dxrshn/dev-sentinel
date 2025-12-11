@@ -2,6 +2,7 @@
 import { Command } from "commander";
 import { runBaseline } from "./commands/health-baseline.js";
 import { runScan } from "./commands/health-scan.js";
+import { runDepsScan } from "./commands/deps-scan.js";
 import { runDepsUpdate } from "./commands/deps-update.js";
 import { runDocsGenerate } from "./commands/docs-generate.js";
 
@@ -21,6 +22,11 @@ program
   .command("health:scan")
   .option("--repo <repo>", "Repo name", "demo/dev-sentinel")
   .action(runScan);
+
+program
+  .command("deps:scan")
+  .option("--repo <repo>", "Repo name", "demo/dev-sentinel")
+  .action(runDepsScan);
 
 program
   .command("deps:update")

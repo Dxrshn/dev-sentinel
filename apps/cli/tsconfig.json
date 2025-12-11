@@ -1,14 +1,15 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-      "module": "ESNext",
-      "moduleResolution": "bundler",
-      "esModuleInterop": true,
-      "allowSyntheticDefaultImports": true,
-      "outDir": "./dist",
-      "rootDir": "./src"
-    },
-    "ts-node": {
-      "esm": true
-    }
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "types": ["node"]
+  },
+  "ts-node": {
+    "esm": true
   }
+}
